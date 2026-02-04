@@ -37,11 +37,12 @@ export default function DashboardPage() {
 
   const refreshGoals = async () => {
     if (!user) return;
-    const goalsRes = await fetch(`http://localhost:8000/api/gamification/goals/${user.id}`);
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    const goalsRes = await fetch(`${API_URL}/api/gamification/goals/${user.id}`);
     if (goalsRes.ok) {
       setGoals(await goalsRes.json());
       // Refresh points too
-      const profileRes = await fetch(`http://localhost:8000/api/gamification/profile/${user.id}`);
+      const profileRes = await fetch(`${API_URL}/api/gamification/profile/${user.id}`);
       if (profileRes.ok) setGamificationProfile(await profileRes.json());
     }
   };
@@ -94,8 +95,8 @@ export default function DashboardPage() {
     if (currentUser && currentUser.id) {
       const fetchHistory = async () => {
         try {
-          // TODO: Replace with environment variable for API URL
-          const response = await fetch(`http://localhost:8000/api/predictions/user/${currentUser.id}`);
+          const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+          const response = await fetch(`${API_URL}/api/predictions/user/${currentUser.id}`);
           if (response.ok) {
             const data = await response.json();
             
@@ -132,14 +133,15 @@ export default function DashboardPage() {
             }
           }
 
+
           // Fetch Gamification Profile
-          const profileRes = await fetch(`http://localhost:8000/api/gamification/profile/${currentUser.id}`);
+          const profileRes = await fetch(`${API_URL}/api/gamification/profile/${currentUser.id}`);
           if (profileRes.ok) {
             setGamificationProfile(await profileRes.json());
           }
 
           // Fetch Goals
-          const goalsRes = await fetch(`http://localhost:8000/api/gamification/goals/${currentUser.id}`);
+          const goalsRes = await fetch(`${API_URL}/api/gamification/goals/${currentUser.id}`);
           if (goalsRes.ok) {
             setGoals(await goalsRes.json());
           }

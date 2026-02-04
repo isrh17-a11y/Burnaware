@@ -37,7 +37,8 @@ export default function GoalTracker({ goals, userId, onGoalUpdate }: GoalTracker
     });
 
     try {
-      await fetch(`http://localhost:8000/api/gamification/goals/${goal.id}`, {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      await fetch(`${API_URL}/api/gamification/goals/${goal.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ is_completed: true })
@@ -51,7 +52,8 @@ export default function GoalTracker({ goals, userId, onGoalUpdate }: GoalTracker
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await fetch(`http://localhost:8000/api/gamification/goals/${userId}`, {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      await fetch(`${API_URL}/api/gamification/goals/${userId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newGoal)

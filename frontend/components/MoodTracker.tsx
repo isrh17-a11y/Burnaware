@@ -47,8 +47,9 @@ export default function MoodTracker({ userId, onActivityComplete }: MoodTrackerP
   const handleMoodSelect = async (mood: MoodCategory) => {
     setSelectedMood(mood);
     setLoading(true);
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
     try {
-      const res = await fetch(`http://localhost:8000/api/mood/log/${userId}`, {
+      const res = await fetch(`${API_URL}/api/mood/log/${userId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mood_category: mood })
@@ -89,7 +90,8 @@ export default function MoodTracker({ userId, onActivityComplete }: MoodTrackerP
       setStep('reassure'); // Go back to list
       setActiveActivity(null);
       
-      const res = await fetch(`http://localhost:8000/api/mood/activity/${userId}/complete`, {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const res = await fetch(`${API_URL}/api/mood/activity/${userId}/complete`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title: activity.title })
