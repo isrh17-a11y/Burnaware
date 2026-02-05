@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { AssessmentData, BurnoutPrediction, ChatMessage, User } from './types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://burnaware.onrender.com';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 // Create axios instance with default config
 const apiClient = axios.create({
