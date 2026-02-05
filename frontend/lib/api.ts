@@ -19,7 +19,12 @@ export class ApiClient {
   }
 
   static async register(email: string, password: string, name: string): Promise<User> {
-    const response = await apiClient.post('/api/users/register', { email, password, name });
+    const response = await apiClient.post('/api/users/register', { 
+      email, 
+      password, 
+      username: email.split('@')[0], // Use email prefix as username
+      full_name: name 
+    });
     return response.data;
   }
 
