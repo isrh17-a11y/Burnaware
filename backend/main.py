@@ -38,3 +38,19 @@ app.include_router(prediction_routes.router, prefix="/api/predictions", tags=["p
 app.include_router(chatbot_routes.router, prefix="/api/chatbot", tags=["chatbot"])
 app.include_router(gamification_routes.router, prefix="/api/gamification", tags=["gamification"])
 app.include_router(mood_routes.router, prefix="/api/mood", tags=["mood"])
+
+@app.get("/")
+async def root():
+    return {
+        "message": "Welcome to BurnAware API",
+        "status": "running",
+        "version": "1.0.0"
+    }
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=10000, reload=True)
