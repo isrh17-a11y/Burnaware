@@ -1,24 +1,39 @@
-# Vercel Deployment Guide
+# Vercel Deployment Guide - FIXED
 
-## ✅ Your Deployments Are Working!
+## 🔴 Build Failed - Here's the Fix!
 
-Your Vercel deployments are building successfully. If you're experiencing issues, it's likely related to environment variables or runtime configuration.
+Your deployment is failing because Vercel needs to know that your Next.js app is in the `frontend` subdirectory, not the root.
 
-## Required: Set Environment Variable
+## STEP 1: Configure Root Directory in Vercel (CRITICAL)
 
-**CRITICAL**: You must configure the backend API URL in Vercel:
+**You MUST do this first:**
 
 1. Go to your Vercel dashboard: https://vercel.com/israahs-projects/burnaware
 2. Click on **Settings** tab
-3. Click on **Environment Variables** in the left sidebar
-4. Add a new variable:
+3. Scroll down to **Build & Development Settings**
+4. Find **Root Directory** setting
+5. Click **Edit** next to Root Directory
+6. Enter: `frontend`
+7. Click **Save**
+
+## STEP 2: Set Environment Variable
+
+**Configure the backend API URL:**
+
+1. Still in **Settings** tab
+2. Click on **Environment Variables** in the left sidebar
+3. Add a new variable:
    - **Name**: `NEXT_PUBLIC_API_URL`
    - **Value**: `https://burnaware.onrender.com`
    - **Environment**: Select **Production**, **Preview**, and **Development**
-5. Click **Save**
-6. Go back to **Deployments** tab
-7. Click the **⋯** menu on the latest deployment
-8. Click **Redeploy**
+4. Click **Save**
+
+## STEP 3: Redeploy
+
+1. Go back to **Deployments** tab
+2. Click the **⋯** menu on the latest deployment
+3. Click **Redeploy**
+4. This time it should succeed! ✅
 
 ## How to Access Your Site
 
