@@ -25,12 +25,14 @@ app = FastAPI(
 # ✅ THEN ADD CORS (IMPORTANT ORDER)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:3000",
+        "https://burnaware.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 # routers
 app.include_router(user_routes.router, prefix="/api/users", tags=["users"])
