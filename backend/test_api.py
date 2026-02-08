@@ -6,7 +6,7 @@ Run this after starting simple_main.py to test all endpoints
 import requests
 import json
 
-BASE_URL = "http://localhost:8000"
+BASE_URL = "http://localhost:10000"
 
 def print_section(title):
     print("\n" + "="*60)
@@ -64,7 +64,7 @@ def test_get_predictions():
 
 def main():
     print("\n" + "🧪 BurnAware API Test Suite".center(60, "="))
-    print("Make sure simple_main.py is running on http://localhost:8000")
+    print("Make sure simple_main.py is running on http://localhost:10000")
     print("="*60)
     
     try:

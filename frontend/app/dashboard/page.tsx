@@ -37,7 +37,7 @@ export default function DashboardPage() {
 
   const refreshGoals = async () => {
     if (!user) return;
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:10000';
     const goalsRes = await fetch(`${API_URL}/api/gamification/goals/${user.id}`);
     if (goalsRes.ok) {
       setGoals(await goalsRes.json());
@@ -95,7 +95,7 @@ export default function DashboardPage() {
     if (currentUser && currentUser.id) {
       const fetchHistory = async () => {
         try {
-          const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+          const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:10000';
           const response = await fetch(`${API_URL}/api/predictions/user/${currentUser.id}`);
           if (response.ok) {
             const data = await response.json();

@@ -2,7 +2,7 @@
 import requests
 import json
 
-BASE_URL = "http://localhost:8000/api"
+BASE_URL = "http://localhost:10000/api"
 
 def test_prediction():
     # 1. Login to get a valid user ID (or just use a known one if we assume it exists)
