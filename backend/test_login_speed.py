@@ -1,7 +1,7 @@
 import requests
 import time
 
-BASE_URL = "http://localhost:8000/api/users"
+BASE_URL = "http://localhost:10000/api/users"
 
 def test_login_speed():
     # 1. Register a test user (if not exists)
