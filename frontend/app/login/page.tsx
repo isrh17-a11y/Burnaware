@@ -39,16 +39,20 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#6B9FE8] via-[#B4A7D6] to-[#F4A6C0] p-4">
+    <div className="min-h-screen flex items-center justify-center bg-[linear-gradient(to_bottom_right,#F5DE7A,#F2EEEC,#EFBF38,#E08600)] p-4">
       <div className="w-full max-w-md">
         {/* Logo/Title */}
         <div className="text-center mb-8 animate-fadeIn">
-          <h1 className="text-4xl font-bold text-white mb-2">BurnAware</h1>
-          <p className="text-white/90 text-lg">Your Mental Wellness Companion</p>
+          <div className="inline-flex items-center gap-2 bg-[#F2EEEC]/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm mb-4 border border-[#763A12]/10">
+            <span className="text-2xl">🔥</span>
+            <span className="text-sm font-medium text-[#763A12]">BurnAware</span>
+          </div>
+          <h1 className="text-4xl font-bold text-[#763A12] mb-2">Welcome Back</h1>
+          <p className="text-[#763A12]/80 text-lg">Your Mental Wellness Companion</p>
         </div>
 
         {/* Login/Register Card */}
-        <div className="glass rounded-3xl shadow-2xl p-8 animate-fadeIn">
+        <div className="bg-[#F2EEEC]/80 backdrop-blur-xl rounded-3xl shadow-xl shadow-[#763A12]/5 p-8 animate-fadeIn border border-[#763A12]/10">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
               {isLogin ? 'Welcome Back' : 'Create Account'}
@@ -122,7 +126,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-[#6B9FE8] to-[#B4A7D6] text-white py-3 rounded-xl font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-gradient-to-r from-[#AA4C0A] to-[#E08600] text-white py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-[#E08600]/20 transform hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Please wait...' : isLogin ? 'Sign In' : 'Create Account'}
             </button>
@@ -134,15 +138,15 @@ export default function LoginPage() {
                 setIsLogin(!isLogin);
                 setError('');
               }}
-              className="text-[#6B9FE8] hover:text-[#B4A7D6] font-medium text-sm"
+              className="text-orange-600 hover:text-orange-700 font-medium text-sm transition-colors"
             >
               {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
             </button>
           </div>
 
           {/* Demo Credentials */}
-          <div className="mt-6 p-3 bg-blue-50 rounded-xl border border-blue-100">
-            <p className="text-xs text-blue-800 text-center">
+          <div className="mt-6 p-3 bg-orange-50 rounded-xl border border-orange-100">
+            <p className="text-xs text-orange-800 text-center">
               <strong>Demo:</strong> Use any email/password to try the app
             </p>
           </div>
