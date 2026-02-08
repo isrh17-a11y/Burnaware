@@ -72,7 +72,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-[#763A12] mb-2">
                   Full Name
                 </label>
                 <div className="relative">
@@ -81,7 +81,7 @@ export default function LoginPage() {
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9FE8] focus:border-transparent bg-white/80"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white"
                     placeholder="John Doe"
                     required={!isLogin}
                   />
@@ -90,7 +90,7 @@ export default function LoginPage() {
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[#763A12] mb-2">
                 Email Address
               </label>
               <div className="relative">
@@ -99,7 +99,7 @@ export default function LoginPage() {
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9FE8] focus:border-transparent bg-white/80"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white"
                   placeholder="you@example.com"
                   required
                 />
@@ -107,7 +107,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[#763A12] mb-2">
                 Password
               </label>
               <div className="relative">
