@@ -54,11 +54,11 @@ export default function LoginPage() {
         {/* Login/Register Card */}
         <div className="bg-[#F2EEEC]/80 backdrop-blur-xl rounded-3xl shadow-xl shadow-[#763A12]/5 p-8 animate-fadeIn border border-[#763A12]/10">
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <h2 className="text-2xl font-bold text-[#763A12] mb-2">
               {isLogin ? 'Welcome Back' : 'Create Account'}
             </h2>
-            <p className="text-gray-600">
-              {isLogin ? 'Sign in to continue your wellness journey' : 'Start your wellness journey today'}
+            <p className="text-[#763A12]/80">
+              {isLogin ? 'Sign in to continue your wellness journey' : 'Start tracking your wellness today'}
             </p>
           </div>
 
