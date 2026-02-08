@@ -25,7 +25,7 @@ export class ApiClient {
       email, 
       password, 
       username: email.split('@')[0], // Use email prefix as username
-      full_name: name 
+      name: name 
     });
     return response.data;
   }

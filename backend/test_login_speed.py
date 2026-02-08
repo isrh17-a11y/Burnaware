@@ -13,7 +13,7 @@ def test_login_speed():
             "email": email,
             "password": password,
             "username": "speedtest",
-            "full_name": "Speed Test"
+            "name": "Speed Test"
         })
     except:
         pass # User might exist
