@@ -25,11 +25,11 @@ export default function LoginPage() {
       if (isLogin) {
         const user = await ApiClient.login(formData.email, formData.password);
         localStorage.setItem('user', JSON.stringify(user));
-        router.push('/dashboard');
+        router.push('/assessment');
       } else {
         const user = await ApiClient.register(formData.email, formData.password, formData.name);
         localStorage.setItem('user', JSON.stringify(user));
-        router.push('/dashboard');
+        router.push('/assessment');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Authentication failed');
