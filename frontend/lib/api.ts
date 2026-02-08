@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { AssessmentData, BurnoutPrediction, ChatMessage, User } from './types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API_BASE_URL = 'http://localhost:10000';
 
 // Create axios instance with default config
 // Extended timeout for Render cold starts (free tier can take 30-60 seconds to wake up)
