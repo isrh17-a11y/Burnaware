@@ -11,6 +11,7 @@ import GamificationCard from '@/components/GamificationCard';
 import GoalTracker from '@/components/GoalTracker';
 import MoodTracker from '@/components/MoodTracker';
 import DailyQuote from '@/components/DailyQuote';
+import ScoreUpgradeModal from '@/components/ScoreUpgradeModal';
 import { BurnoutHistory, User, GamificationProfile, Goal } from '@/lib/types';
 import {
   LayoutDashboard,
@@ -35,15 +36,39 @@ export default function DashboardPage() {
   const [gamificationProfile, setGamificationProfile] = useState<GamificationProfile | null>(null);
   const [goals, setGoals] = useState<Goal[]>([]);
 
-  const refreshGoals = async () => {
+  // Modal state
+  const [showScoreModal, setShowScoreModal] = useState(false);
+  const [scoreModalData, setScoreModalData] = useState({
+    pointsEarned: 0,
+    previousScore: 0,
+    newScore: 0,
+  });
+
+  const handleActivityComplete = async (pointsEarned: number = 20) => {
     if (!user) return;
     const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:10000';
+    
+    // Store previous score
+    const prevScore = gamificationProfile?.points || 0;
+    
+    // Refresh goals and profile
     const goalsRes = await fetch(`${API_URL}/api/gamification/goals/${user.id}`);
     if (goalsRes.ok) {
       setGoals(await goalsRes.json());
-      // Refresh points too
-      const profileRes = await fetch(`${API_URL}/api/gamification/profile/${user.id}`);
-      if (profileRes.ok) setGamificationProfile(await profileRes.json());
+    }
+    
+    const profileRes = await fetch(`${API_URL}/api/gamification/profile/${user.id}`);
+    if (profileRes.ok) {
+      const newProfile = await profileRes.json();
+      setGamificationProfile(newProfile);
+      
+      // Show modal with score upgrade
+      setScoreModalData({
+        pointsEarned,
+        previousScore: prevScore,
+        newScore: newProfile.points,
+      });
+      setShowScoreModal(true);
     }
   };
 
@@ -326,7 +351,7 @@ export default function DashboardPage() {
 
           {/* Mood Tracker */}
           <div className="relative">
-             <MoodTracker userId={user.id} onActivityComplete={refreshGoals} />
+             <MoodTracker userId={user.id} onActivityComplete={() => handleActivityComplete(20)} />
           </div>
 
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
@@ -344,7 +369,7 @@ export default function DashboardPage() {
 
              {/* Right Column: Goals & History */}
             <div className="space-y-6">
-               <GoalTracker goals={goals} userId={user.id} onGoalUpdate={refreshGoals} />
+               <GoalTracker goals={goals} userId={user.id} onGoalUpdate={() => handleActivityComplete(50)} />
                <div className="bg-gradient-to-br from-[#F2EEEC]/60 to-[#F5DE7A]/20 backdrop-blur-2xl rounded-2xl shadow-lg border border-[#763A12]/10 p-4 overflow-hidden">
                   <h3 className="text-lg font-bold text-[#763A12] mb-4 px-2">History</h3>
                   <div className="overflow-x-auto">
@@ -376,6 +401,18 @@ export default function DashboardPage() {
 
       {/* Chatbot */}
       <ChatbotPanel />
+
+      {/* Score Upgrade Modal */}
+      <ScoreUpgradeModal
+        isOpen={showScoreModal}
+        onClose={() => setShowScoreModal(false)}
+        pointsEarned={scoreModalData.pointsEarned}
+        previousScore={scoreModalData.previousScore}
+        newScore={scoreModalData.newScore}
+        currentLevel={gamificationProfile?.level || 1}
+        levelProgress={gamificationProfile?.points ? (gamificationProfile.points % 100) : 0}
+        maxLevelXP={100}
+      />
     </div>
   );
 }
