@@ -13,6 +13,15 @@ class GamificationService:
     # --- Profile & Points ---
     def get_profile(self, user_id: int):
         user = self.db.query(User).filter(User.id == user_id).first()
+        if not user:
+            # Return default profile if user not found
+            return {
+                "points": 0,
+                "level": 1,
+                "streak": None,
+                "achievements": []
+            }
+        
         streak = self.db.query(Streak).filter(Streak.user_id == user_id).first()
         
         # Determine earned achievements
@@ -32,8 +41,8 @@ class GamificationService:
             achievements_resp.append(ach_dict)
             
         return {
-            "points": user.points,
-            "level": user.level,
+            "points": user.points if user.points is not None else 0,
+            "level": user.level if user.level is not None else 1,
             "streak": streak,
             "achievements": achievements_resp
         }
