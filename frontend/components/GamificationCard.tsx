@@ -35,7 +35,16 @@ export default function GamificationCard({ profile }: GamificationCardProps) {
     }
   }, [profile?.points]);
 
-  if (!profile) return null;
+  // Show loading state if profile is null
+  if (!profile) {
+    return (
+      <div className="bg-gradient-to-br from-[#F2EEEC]/60 to-[#F5DE7A]/20 backdrop-blur-2xl rounded-3xl shadow-xl shadow-[#763A12]/5 p-6 animate-fadeIn relative overflow-hidden border border-[#763A12]/10">
+        <div className="text-center py-4">
+          <p className="text-[#763A12]/70 animate-pulse">Loading your progress...</p>
+        </div>
+      </div>
+    );
+  }
 
   const nextLevelPoints = profile.level * 100;
   const progress = (profile.points % 100) / 100 * 100;
