@@ -5,19 +5,19 @@ from models.coaching import Goal
 from models.user import User
 from models.prediction import Prediction
 from schemas.chatbot import ChatMessage
-from chatbot.bot import MentalHealthBot
+from chatbot.engine import BurnAwareChatbot
 from typing import List, Optional, Dict
 
 class ChatbotService:
     def __init__(self, db: Session):
         self.db = db
-        self.bot = MentalHealthBot()
+        self.bot = BurnAwareChatbot()
     
     def _get_user_context(self, user_id: int) -> Dict:
         """Gather user context for personalized responses"""
         context = {
-            'name': '',
-            'mood': 'neutral',
+            'name': 'friend',
+            'mood': 'okay',
             'stress': 5,
             'intent': '',
             'goals': [],
@@ -27,8 +27,7 @@ class ChatbotService:
         # Get user's name
         user = self.db.query(User).filter(User.id == user_id).first()
         if user:
-            # Use full_name if available, otherwise username, otherwise first part of email
-            context['name'] = user.full_name or user.username or user.email.split('@')[0]
+            context['name'] = user.full_name or user.username or "friend"
         
         # Get most recent mood
         recent_mood = self.db.query(MoodEntry).filter(
@@ -44,19 +43,9 @@ class ChatbotService:
         ).order_by(Prediction.created_at.desc()).first()
         
         if recent_prediction:
-            # Extract stress_level from input_features JSON
             input_features = recent_prediction.input_features
             if input_features and 'stress_level' in input_features:
                 context['stress'] = input_features['stress_level']
-        
-        # Get active goals (not completed)
-        active_goals = self.db.query(Goal).filter(
-            Goal.user_id == user_id,
-            Goal.is_completed == False
-        ).order_by(Goal.created_at.desc()).limit(3).all()
-        
-        if active_goals:
-            context['goals'] = [goal.title for goal in active_goals]
         
         return context
     
@@ -65,24 +54,21 @@ class ChatbotService:
         # Get user context for personalization
         user_context = self._get_user_context(user_id)
         
-        # Get recent history for context
-        history_records = self.get_chat_history(user_id, limit=3)
-        history = []
-        for record in reversed(history_records):
-            history.append({'role': 'user', 'message': record.message})
-            history.append({'role': 'bot', 'message': record.response})
-
-        # Generate personalized response with context
-        response_text = self.bot.generate_response(
-            message.message, 
-            user_context=user_context,
-            history=history
+        # Generate personalized response with new engine
+        # Engine expects: user_id: str, user_data: dict, message: str
+        response_text = self.bot.generate_reply(
+            user_id=str(user_id),
+            user_data=user_context,
+            message=message.message
         )
         
-        # Analyze sentiment
-        sentiment = self.bot.analyze_sentiment(message.message)
+        # Analyze sentiment (Basic fallback or implement in engine if needed)
+        # The new engine doesn't have analyze_sentiment, so we'll defaults to neutral 
+        # or implement a simple check here if needed.
+        # For now, let's keep it simple as "neutral" or a basic keyword check.
+        sentiment = "neutral" 
         
-        # Save to database
+        # Save to database (Persistent history)
         chat_record = ChatHistory(
             user_id=user_id,
             message=message.message,

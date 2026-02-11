@@ -1,11 +1,12 @@
 """
 Test the enhanced chatbot with empathy, humor, and personalization
 """
-from chatbot.bot import MentalHealthBot
+from chatbot.engine import BurnAwareChatbot
 
 def test_empathy_and_personalization():
     """Test chatbot with user context"""
-    bot = MentalHealthBot()
+    bot = BurnAwareChatbot()
+    user_id = "test_user_123"
     
     print("=" * 80)
     print("TEST 1: User feeling overwhelmed (High stress)")
@@ -19,7 +20,7 @@ def test_empathy_and_personalization():
     }
     
     message = "I'm feeling overwhelmed with work"
-    response = bot.generate_response(message, user_context=context)
+    response = bot.generate_reply(user_id, context, message)
     print(f"User: {message}")
     print(f"Bot: {response}\n")
     
@@ -35,7 +36,7 @@ def test_empathy_and_personalization():
     }
     
     message = "I can't sleep again"
-    response = bot.generate_response(message, user_context=context)
+    response = bot.generate_reply(user_id, context, message)
     print(f"User: {message}")
     print(f"Bot: {response}\n")
     
@@ -51,7 +52,7 @@ def test_empathy_and_personalization():
     }
     
     message = "Feeling better today!"
-    response = bot.generate_response(message, user_context=context)
+    response = bot.generate_reply(user_id, context, message)
     print(f"User: {message}")
     print(f"Bot: {response}\n")
     
@@ -67,7 +68,7 @@ def test_empathy_and_personalization():
     }
     
     message = "Hey"
-    response = bot.generate_response(message, user_context=context)
+    response = bot.generate_reply(user_id, context, message)
     print(f"User: {message}")
     print(f"Bot: {response}\n")
     
@@ -83,7 +84,7 @@ def test_empathy_and_personalization():
     }
     
     message = "I've had 3 coffees already and I'm still exhausted"
-    response = bot.generate_response(message, user_context=context)
+    response = bot.generate_reply(user_id, context, message)
     print(f"User: {message}")
     print(f"Bot: {response}\n")
     
@@ -99,7 +100,7 @@ def test_empathy_and_personalization():
     }
     
     message = "I'm feeling fun, crack some jokes!"
-    response = bot.generate_response(message, user_context=context)
+    response = bot.generate_reply(user_id, context, message)
     print(f"User: {message}")
     print(f"Bot: {response}\n")
     
@@ -115,7 +116,7 @@ def test_empathy_and_personalization():
     }
     
     message = "Tell me a joke to cheer me up"
-    response = bot.generate_response(message, user_context=context)
+    response = bot.generate_reply(user_id, context, message)
     print(f"User: {message}")
     print(f"Bot: {response}\n")
     
@@ -124,7 +125,7 @@ def test_empathy_and_personalization():
     print("=" * 80)
     
     message = "I'm stressed"
-    response = bot.generate_response(message)  # No context
+    response = bot.generate_reply(user_id, {}, message)  # No context
     print(f"User: {message}")
     print(f"Bot: {response}\n")
 

@@ -7,13 +7,13 @@ class MentalHealthBot:
     def __init__(self):
         # Empathy bank - warm, supportive phrases
         self.empathy_bank = {
-            "stressed": ["I hear you.", "That sounds exhausting.", "That's a lot to carry.", "I can feel the weight of that."],
-            "overwhelmed": ["I hear you.", "That's overwhelming.", "That sounds like a lot.", "I'm here with you."],
-            "tired": ["That sounds draining.", "Rest is so important.", "Your body is telling you something.", "I hear you."],
-            "anxious": ["I'm here with you.", "That must feel heavy.", "You're not alone in this.", "I hear you."],
-            "sad": ["I'm so sorry you're feeling this way.", "That's really hard.", "I'm here with you.", "Sending care your way. 💙"],
-            "positive": ["That's wonderful!", "I love hearing that!", "That's amazing!", "So glad to hear it!"],
-            "general": ["I hear you.", "Thank you for sharing.", "I'm listening.", "I'm here for you."]
+            "stressed": ["I hear you", "That sounds exhausting", "That's a lot to carry", "I can feel the weight of that"],
+            "overwhelmed": ["I hear you", "That's overwhelming", "That sounds like a lot", "I'm here with you"],
+            "tired": ["That sounds draining", "Rest is so important", "Your body is telling you something", "I hear you"],
+            "anxious": ["I'm here with you", "That must feel heavy", "You're not alone in this", "I hear you"],
+            "sad": ["I'm so sorry you're feeling this way", "That's really hard", "I'm here with you", "Sending care your way 💙"],
+            "positive": ["That's wonderful", "I love hearing that", "That's amazing", "So glad to hear it"],
+            "general": ["I hear you", "Thank you for sharing", "I'm listening", "I'm here for you"]
         }
         
         # Humor bank - gentle, relatable jokes for appropriate moments
@@ -97,11 +97,11 @@ class MentalHealthBot:
                 "How's that sitting with you?"
             ],
             "encouragement": [
-                "I'm here with you. 🌿",
-                "One small step is enough today. 🌿",
-                "You've got this. 💙",
-                "I believe in you.",
-                "You're doing better than you think."
+                "I'm here with you 🌿",
+                "One small step is enough today 🌿",
+                "You've got this 💙",
+                "I believe in you",
+                "You're doing better than you think"
             ],
             "exploration": [
                 "What's on your mind?",
@@ -174,9 +174,12 @@ class MentalHealthBot:
     def _create_personalized_response(self, intent: str, name: str, mood: str, stress: int, goals: List[str], message: str) -> str:
         """Build structured response: empathy → personalization → suggestion → follow-up"""
         
-        # 1. Empathy opener
+        # 1. Empathy opener with name
         empathy = self._get_empathy_opener(intent, mood)
-        name_part = f", {name}" if name else ""
+        if name:
+            opening = f"{empathy}, {name}."
+        else:
+            opening = f"{empathy}."
         
         # 2. Personalization based on context
         personalization = self._get_personalization(mood, stress, goals)
@@ -188,18 +191,21 @@ class MentalHealthBot:
         followup = self._get_gentle_followup(intent, mood, stress, message)
         
         # Combine parts naturally
-        parts = [f"{empathy}{name_part}."]
-        if personalization:
-            parts.append(personalization)
-        if suggestion:
-            parts.append(suggestion)
-        if followup:
-            parts.append(followup)
+        response = opening
         
-        return " ".join(parts)
+        if personalization:
+            response += " " + personalization
+        
+        if suggestion:
+            response += " " + suggestion
+        
+        if followup:
+            response += " " + followup
+        
+        return response
     
     def _get_empathy_opener(self, intent: str, mood: str) -> str:
-        """Select appropriate empathy phrase"""
+        """Select appropriate empathy phrase (without punctuation)"""
         # Map intent to empathy category
         if intent in self.empathy_bank:
             category = intent
@@ -217,29 +223,45 @@ class MentalHealthBot:
         # Mention mood if relevant
         if mood and mood != "neutral" and mood != "okay":
             mood_map = {
-                "anxious": "feeling anxious",
-                "sad": "going through a tough time",
-                "tired": "exhausted",
-                "stressed": "under a lot of stress"
+                "anxious": "I can see you're feeling anxious",
+                "sad": "I can see you're going through a tough time",
+                "tired": "I can see you're exhausted",
+                "stressed": "I can see you're under a lot of stress"
             }
             if mood in mood_map:
-                parts.append(f"I can see you're {mood_map[mood]}")
+                parts.append(mood_map[mood])
         
         # Mention stress level
         if stress >= 8:
-            parts.append("and your stress is really high right now")
+            stress_msg = "your stress is really high right now"
+            if parts:
+                parts[-1] += " and " + stress_msg
+            else:
+                parts.append("Your stress is really high right now")
         elif stress >= 6:
-            parts.append("and you're pretty stressed")
+            stress_msg = "you're pretty stressed"
+            if parts:
+                parts[-1] += " and " + stress_msg
+            else:
+                parts.append("You're pretty stressed")
         elif stress <= 3:
             parts.append("It's good to see your stress is lower")
         
-        # Mention goals if any
+        # Mention goals if any (as separate sentence)
+        goal_question = ""
         if goals and len(goals) > 0:
             goal = goals[0]  # Reference first active goal
             if stress < 5:
-                parts.append(f"How's '{goal}' going?")
+                goal_question = f" How's '{goal}' going?"
         
-        return " ".join(parts) + "." if parts else ""
+        # Combine
+        result = ""
+        if parts:
+            result = parts[0] + "."
+        if goal_question:
+            result += goal_question
+        
+        return result
     
     def _get_simple_suggestion(self, intent: str, stress: int) -> str:
         """Provide ONE actionable tip"""
