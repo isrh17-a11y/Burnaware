@@ -1,17 +1,22 @@
 import os
+import logging
+
 try:
     from dotenv import load_dotenv
     load_dotenv()
 except ImportError:
     pass  # On Render, env vars are set via dashboard
 
-import google.generativeai as genai
+from google import genai
 from .memory import save_message
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+logger = logging.getLogger(__name__)
 
-# Use the free flash model
-_model = genai.GenerativeModel("gemini-1.5-flash")
+_api_key = os.getenv("GEMINI_API_KEY")
+if not _api_key:
+    logger.error("GEMINI_API_KEY is not set! Chatbot will use fallback responses.")
+
+_client = genai.Client(api_key=_api_key)
 
 
 class BurnAwareChatbot:
@@ -36,12 +41,13 @@ Your job is to:
 - Do not repeat the user's name too often."""
 
         try:
-            response = _model.generate_content(
-                f"{system_prompt}\n\nUser: {message}\nEmber:"
+            response = _client.models.generate_content(
+                model="gemini-2.0-flash",
+                contents=f"{system_prompt}\n\nUser: {message}\nEmber:"
             )
             reply = response.text.strip()
         except Exception as e:
-            # Graceful fallback if API fails
+            logger.error(f"Gemini API call failed: {type(e).__name__}: {e}")
             reply = "I'm here with you. It sounds like a lot is going on — take a breath, one thing at a time."
 
         # Save to memory
