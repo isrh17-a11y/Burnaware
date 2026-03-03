@@ -129,5 +129,41 @@ def test_empathy_and_personalization():
     print(f"User: {message}")
     print(f"Bot: {response}\n")
 
+    print("=" * 80)
+    print("TEST 9: Simple Greeting")
+    print("=" * 80)
+    
+    message = "hi"
+    response = bot.generate_reply(user_id, context, message)
+    print(f"User: {message}")
+    print(f"Bot: {response}\n")
+
+    print("=" * 80)
+    print("TEST 10: Disagreement (No)")
+    print("=" * 80)
+    
+    message = "no"
+    response = bot.generate_reply(user_id, context, message)
+    print(f"User: {message}")
+    print(f"Bot: {response}\n")
+
+    print("=" * 80)
+    print("TEST 11: Agreement (Yes)")
+    print("=" * 80)
+    
+    message = "yes"
+    response = bot.generate_reply(user_id, context, message)
+    print(f"User: {message}")
+    print(f"Bot: {response}\n")
+    
+    print("=" * 80)
+    print("TEST 12: Farewell")
+    print("=" * 80)
+    
+    message = "bye"
+    response = bot.generate_reply(user_id, context, message)
+    print(f"User: {message}")
+    print(f"Bot: {response}\n")
+
 if __name__ == "__main__":
     test_empathy_and_personalization()

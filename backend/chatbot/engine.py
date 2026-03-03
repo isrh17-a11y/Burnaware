@@ -1,46 +1,46 @@
-from .intents import detect_intent
-from .templates import pick_template, pick_closer
-from .knowledge import get_tip
-from .memory import save_message, get_history
+import os
+from dotenv import load_dotenv
+import google.generativeai as genai
+from .memory import save_message
+
+load_dotenv()
+
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
+# Use the free flash model
+_model = genai.GenerativeModel("gemini-1.5-flash")
 
 
 class BurnAwareChatbot:
 
-    def generate_reply(self, user_id: str, user_data: dict, message: str):
-
+    def generate_reply(self, user_id: str, user_data: dict, message: str) -> str:
         name = user_data.get("name", "friend")
         mood = user_data.get("mood", "okay")
         stress = user_data.get("stress", 5)
 
-        # 1. intent
-        intent = detect_intent(message)
+        system_prompt = f"""You are Ember, a warm and empathetic wellness assistant inside an app called BurnAware.
+You are talking to {name}.
+Their current mood is: {mood}.
+Their stress level is: {stress} out of 10.
 
-        # 2. memory (unused in logic but good for context if needed later)
-        # history = get_history(user_id)
+Your job is to:
+- Respond with empathy and warmth, not clinical advice.
+- Keep responses short: 2-3 sentences max.
+- Offer ONE gentle, practical suggestion when appropriate.
+- Match the energy — if they're venting, validate first. If they're doing well, celebrate with them.
+- Never use bullet points or headers. Sound like a caring friend, not a therapist.
+- If stress is above 7, prioritize emotional support over tips.
+- Do not repeat the user's name too often."""
 
-        # 3. template + tip
-        empathy_line = pick_template(intent)
-        tip = get_tip(intent)
-        closer = pick_closer()
-
-        # 4. personalize
-        # Safely format empathy line
         try:
-             # Only format if placeholders exist, or use safe formatting
-            formatted_empathy = empathy_line.format(name=name, stress=stress)
-        except KeyError:
-            formatted_empathy = empathy_line
-            
-        reply = f"""
-{formatted_empathy}
+            response = _model.generate_content(
+                f"{system_prompt}\n\nUser: {message}\nEmber:"
+            )
+            reply = response.text.strip()
+        except Exception as e:
+            # Graceful fallback if API fails
+            reply = "I'm here with you. It sounds like a lot is going on — take a breath, one thing at a time."
 
-Since you're feeling {mood}, here's something small you could try:
-👉 {tip}
-
-{closer}
-"""
-
-        # 5. save memory
-        save_message(user_id, message, reply.strip())
-
-        return reply.strip()
+        # Save to memory
+        save_message(user_id, message, reply)
+        return reply

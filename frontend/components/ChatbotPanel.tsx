@@ -124,9 +124,9 @@ export default function ChatbotPanel() {
         <>
           {/* Messages */}
           <div className="h-[560px] overflow-y-auto p-4 space-y-4">
-            {messages.map((message) => (
+            {messages.map((message, index) => (
               <div
-                key={message.id}
+                key={`${message.id}-${index}`}
                 className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
