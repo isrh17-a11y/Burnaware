@@ -3,12 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { submitJournalEntry } from "@/app/actions";
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
 
 export function JournalEntryForm() {
   const router = useRouter();
@@ -46,7 +40,7 @@ export function JournalEntryForm() {
         alert("Journal entry saved!");
         router.push('/dashboard');
       } else {
-        alert("Failed to save entry.");
+        alert("Failed to save entry. Please check your database connection.");
       }
     } catch (err) {
       console.error(err);
@@ -57,58 +51,62 @@ export function JournalEntryForm() {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader>
-        <CardTitle>New Journal Entry</CardTitle>
-      </CardHeader>
-      <form onSubmit={handleSubmit}>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label>Emotion Tag</Label>
-            <Select 
-              value={formData.emotionTag} 
-              onValueChange={(val) => setFormData({...formData, emotionTag: val || ""})}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select an emotion" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="anxious">Anxious</SelectItem>
-                <SelectItem value="overwhelmed">Overwhelmed</SelectItem>
-                <SelectItem value="exhausted">Exhausted</SelectItem>
-                <SelectItem value="motivated">Motivated</SelectItem>
-                <SelectItem value="calm">Calm</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="triggerCategory">Trigger Category</Label>
-            <Input 
-              id="triggerCategory" 
-              placeholder="e.g. Work, Study, Exams"
-              value={formData.triggerCategory}
-              onChange={(e) => setFormData({...formData, triggerCategory: e.target.value})}
-              required 
-            />
-          </div>
+    <div className="w-full max-w-md mx-auto bg-gradient-to-br from-[#F2EEEC]/80 to-[#F5DE7A]/30 backdrop-blur-2xl rounded-3xl shadow-xl border border-[#763A12]/10 p-8">
+      <div className="mb-6 text-center">
+        <h2 className="text-2xl font-bold text-[#763A12] mb-2 font-serif">Daily Journal</h2>
+        <p className="text-[#763A12]/70 text-sm">Express yourself safely. Your thoughts are encrypted.</p>
+      </div>
+      
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-[#763A12]">How are you feeling?</label>
+          <select 
+            value={formData.emotionTag} 
+            onChange={(e) => setFormData({...formData, emotionTag: e.target.value})}
+            className="w-full px-4 py-3 bg-white/60 border border-[#763A12]/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#AA4C0A]/50 text-gray-800"
+            required
+          >
+            <option value="" disabled>Select an emotion...</option>
+            <option value="anxious">Anxious</option>
+            <option value="overwhelmed">Overwhelmed</option>
+            <option value="exhausted">Exhausted</option>
+            <option value="motivated">Motivated</option>
+            <option value="calm">Calm</option>
+          </select>
+        </div>
+        
+        <div className="space-y-2">
+          <label htmlFor="triggerCategory" className="block text-sm font-semibold text-[#763A12]">What is on your mind?</label>
+          <input 
+            id="triggerCategory" 
+            placeholder="e.g. Work deadline, Exam stress, Personal"
+            value={formData.triggerCategory}
+            onChange={(e) => setFormData({...formData, triggerCategory: e.target.value})}
+            className="w-full px-4 py-3 bg-white/60 border border-[#763A12]/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#AA4C0A]/50 text-gray-800"
+            required 
+          />
+        </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="content">Journal Content</Label>
-            <Textarea 
-              id="content" 
-              placeholder="Write your thoughts here... (It will be encrypted safely)"
-              className="min-h-[100px]"
-              value={formData.content}
-              onChange={(e) => setFormData({...formData, content: e.target.value})}
-              required 
-            />
-          </div>
-        </CardContent>
-        <CardFooter>
-          <Button type="submit" className="w-full">Save Entry</Button>
-        </CardFooter>
+        <div className="space-y-2">
+          <label htmlFor="content" className="block text-sm font-semibold text-[#763A12]">Pour your thoughts out</label>
+          <textarea 
+            id="content" 
+            placeholder="Write your thoughts here... (This will be encrypted and kept private)"
+            className="w-full px-4 py-3 bg-white/60 border border-[#763A12]/20 rounded-xl min-h-[120px] focus:outline-none focus:ring-2 focus:ring-[#AA4C0A]/50 text-gray-800"
+            value={formData.content}
+            onChange={(e) => setFormData({...formData, content: e.target.value})}
+            required 
+          />
+        </div>
+
+        <button 
+          type="submit" 
+          disabled={loading}
+          className="w-full mt-4 flex justify-center items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#AA4C0A] to-[#E08600] text-white rounded-xl font-bold hover:shadow-lg transform hover:-translate-y-0.5 transition-all disabled:opacity-50"
+        >
+          {loading ? 'Saving securely...' : 'Save Private Entry'}
+        </button>
       </form>
-    </Card>
+    </div>
   );
 }
