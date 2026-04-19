@@ -390,11 +390,9 @@ export default function DashboardPage() {
                 <FileText size={20} />
                 <span className="font-bold">Take New Assessment</span>
               </button>
-              <button 
-                onClick={() => router.push('/journal')}
-                className="flex items-center gap-3 p-4 border-2 border-[#763A12] text-[#763A12] rounded-xl hover:bg-[#763A12] hover:text-white transition-all">
-                <FileText size={20} />
-                <span className="font-bold">Write Journal Entry</span>
+              <button className="flex items-center gap-3 p-4 border-2 border-[#763A12] text-[#763A12] rounded-xl hover:bg-[#763A12] hover:text-white transition-all">
+                <Activity size={20} />
+                <span className="font-bold">View Detailed Report</span>
               </button>
             </div>
           </div>
